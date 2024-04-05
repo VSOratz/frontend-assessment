@@ -1,7 +1,6 @@
-// ListingItem.js
 import React from 'react';
 
-const ListingItem = ({ listing }) => {
+const ListingItem = ({ listing, onViewDetails }) => {
   return (
     <div className="card h-100 d-flex flex-column">
       <img
@@ -19,7 +18,7 @@ const ListingItem = ({ listing }) => {
           Sale Price: ${listing['Sale Price']}
         </p>
         <div className="mt-auto">
-          <button className="btn btn-primary mt-auto">View Details</button>
+          <button className="btn btn-primary mt-auto" onClick={onViewDetails}>View Details</button>
         </div>
       </div>
     </div>

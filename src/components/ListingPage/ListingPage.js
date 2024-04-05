@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import ListingItem from '../ListingItem';
+import ListingItem from '../ListingItem/ListingItem';
 import Filter from '../Filter/Filter';
 import listingsData from '../../data/listings.json';
+import ListingModal from '../ListingModal/ListingModal';
 import './ListingPage.css';
 
 const ListingPage = () => {
   const [filteredListings, setFilteredListings] = useState(listingsData);
+  const [selectedListing, setSelectedListing] = useState(null); // Estado para controlar a listagem selecionada
+  const [showModal, setShowModal] = useState(false);
 
   const handleFilterChange = (filters) => {
     console.log('Filters:', filters);
@@ -22,6 +25,11 @@ const ListingPage = () => {
     setFilteredListings(updatedListings);
   };
 
+  const handleViewDetails = (listing) => {
+    setSelectedListing(listing);
+    setShowModal(true);
+  };
+
   return (
     <div className="container mt-4">
       <div className="row">
@@ -32,11 +40,19 @@ const ListingPage = () => {
         <div className="row">
           {filteredListings.map((listing, index) => (
             <div key={index} className="col-md-3 mb-3">
-              <ListingItem listing={listing} />
+              <ListingItem
+                listing={listing}
+                onViewDetails={() => handleViewDetails(listing)}
+              />
             </div>
           ))}
         </div>
       </div>
+      <ListingModal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        listing={selectedListing}
+      />
     </div>
   );
 };

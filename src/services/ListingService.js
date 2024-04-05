@@ -1,4 +1,3 @@
-// src/services/ListingService.js
 import axios from 'axios';
 
 const LISTINGS_API_URL =
@@ -11,7 +10,7 @@ const fetchListings = async () => {
     return response.data;
   } catch (error) {
     console.error('Error fetching listings:', error);
-    throw error; // Lança o erro para ser tratado onde a função for chamada
+    throw error;
   }
 };
 
