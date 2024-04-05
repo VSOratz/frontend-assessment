@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import InputMask from 'react-input-mask';
 import validator from 'validator';
+import { validateForm } from '../../Util/Util';
 
 const ContactAgent = () => {
   const [formData, setFormData] = useState({
@@ -13,28 +14,6 @@ const ContactAgent = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const phoneInputRef = useRef(null);
 
-  const { fullName, email, phone, comments } = formData;
-
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!fullName || fullName.length < 3) {
-      newErrors.fullName = 'Full name is required (minimum 3 characters)';
-    }
-    if (!validator.isEmail(email)) {
-      newErrors.email = 'Please enter a valid email address';
-    }
-    if (!validator.isMobilePhone(phone, 'en-US')) {
-      newErrors.phone = 'Please enter a valid US phone number';
-    }
-    if (!comments || comments.length < 3) {
-      newErrors.comments = 'Comments are required (minimum 3 characters)';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -44,8 +23,11 @@ const ContactAgent = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validateForm()) {
+    const formErrors = validateForm(formData);
+    if (Object.keys(formErrors).length === 0) {
       setIsSubmitted(true);
+    } else {
+      setErrors(formErrors);
     }
   };
 
@@ -62,7 +44,7 @@ const ContactAgent = () => {
               type="text"
               className={`form-control ${errors.fullName ? 'is-invalid' : ''}`}
               id="fullName"
-              value={fullName}
+              value={formData.fullName}
               onChange={handleChange}
             />
             {errors.fullName && (
@@ -77,7 +59,7 @@ const ContactAgent = () => {
               type="email"
               className={`form-control ${errors.email ? 'is-invalid' : ''}`}
               id="email"
-              value={email}
+              value={formData.email}
               onChange={handleChange}
             />
             {errors.email && (
@@ -92,7 +74,7 @@ const ContactAgent = () => {
               mask="+1 (999) 999-9999"
               className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
               id="phone"
-              value={phone}
+              value={formData.phone}
               onChange={handleChange}
               inputRef={phoneInputRef}
             />{' '}
@@ -109,7 +91,7 @@ const ContactAgent = () => {
               className={`form-control ${errors.comments ? 'is-invalid' : ''}`}
               id="comments"
               rows="3"
-              value={comments}
+              value={formData.comments}
               onChange={handleChange}
             ></textarea>
             {errors.comments && (

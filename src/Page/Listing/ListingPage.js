@@ -3,6 +3,7 @@ import ListingItem from '../Item/ListingItem';
 import Filter from '../../components/Filter/Filter';
 import listingsData from '../../data/listings.json';
 import ListingModal from '../../components/Modal/Detail/DetailModal';
+import { filterListings } from '../../Util/Util';
 
 const ListingPage = () => {
   const [filteredListings, setFilteredListings] = useState(listingsData);
@@ -10,34 +11,8 @@ const ListingPage = () => {
   const [showModal, setShowModal] = useState(false);
 
   const handleFilterChange = (filters) => {
-    if (filters.isFavorite) {
-      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-      const listingsDataFavorites = favorites
-        .map((id) => listingsData.find((listing) => listing.Id === id))
-        .filter(Boolean);
-
-      const updatedListings = listingsDataFavorites.filter((listing) => {
-        return (
-          (!filters.bedrooms || listing.Bedrooms === filters.bedrooms) &&
-          (!filters.bathrooms || listing.Bathrooms === filters.bathrooms) &&
-          (!filters.parking || listing.Parking === filters.parking) &&
-          (!filters.priceRange || listing['Sale Price'] <= filters.priceRange)
-        );
-      });
-
-      setFilteredListings(updatedListings);
-    } else {
-      const updatedListings = listingsData.filter((listing) => {
-        return (
-          (!filters.bedrooms || listing.Bedrooms === filters.bedrooms) &&
-          (!filters.bathrooms || listing.Bathrooms === filters.bathrooms) &&
-          (!filters.parking || listing.Parking === filters.parking) &&
-          (!filters.priceRange || listing['Sale Price'] <= filters.priceRange)
-        );
-      });
-
-      setFilteredListings(updatedListings);
-    }
+    const updatedListings = filterListings(filters, listingsData);
+    setFilteredListings(updatedListings);
   };
 
   const handleViewDetails = (listing) => {
