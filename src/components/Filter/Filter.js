@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart as FaSolidHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as FaRegularHeart } from '@fortawesome/free-regular-svg-icons';
 
 const Filter = ({ onFilterChange }) => {
   const [bedrooms, setBedrooms] = useState('');
   const [bathrooms, setBathrooms] = useState('');
   const [parking, setParking] = useState('');
   const [priceRange, setPriceRange] = useState([1000000]);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   const handleInputChange = (event, setterFunction) => {
     const value = event.target.value;
@@ -17,19 +21,24 @@ const Filter = ({ onFilterChange }) => {
     setPriceRange(value);
   };
 
+  const handleFavoriteToggle = () => {
+    setIsFavorite(!isFavorite);
+  };
+
   const handleSearchClick = () => {
     const filters = {
       bedrooms: bedrooms !== '' ? parseInt(bedrooms, 10) : undefined,
       bathrooms: bathrooms !== '' ? parseInt(bathrooms, 10) : undefined,
       parking: parking !== '' ? parseInt(parking, 10) : undefined,
       priceRange: priceRange,
+      isFavorite: isFavorite,
     };
     onFilterChange(filters);
   };
 
   return (
     <div className="container mt-3">
-      <div className="row">
+      <div className="row align-items-center">
         <div className="col-md-1">
           <label htmlFor="bedrooms">Bedrooms:</label>
         </div>
@@ -42,6 +51,7 @@ const Filter = ({ onFilterChange }) => {
             onChange={(event) => handleInputChange(event, setBedrooms)}
           />
         </div>
+
         <div className="col-md-1">
           <label htmlFor="bathrooms">Bathrooms:</label>
         </div>
@@ -66,8 +76,9 @@ const Filter = ({ onFilterChange }) => {
             onChange={(event) => handleInputChange(event, setParking)}
           />
         </div>
-        <div className="col-md-2">
-          <label htmlFor="priceRange">Price Range:</label>
+
+        <div className="col-md-1">
+          <label htmlFor="parking">Price:</label>
         </div>
         <div className="col-md-2">
           <Slider
@@ -81,7 +92,18 @@ const Filter = ({ onFilterChange }) => {
             <span>{priceRange}</span>
           </div>
         </div>
+        <div className="col-md-1">
+          <label htmlFor="parking">Favorite:</label>
+        </div>
         <div className="col-md-1 d-flex align-items-center">
+          <button className="btn btn-link" onClick={handleFavoriteToggle}>
+            <FontAwesomeIcon
+              icon={isFavorite ? FaSolidHeart : FaRegularHeart}
+              color="red"
+            />
+          </button>
+        </div>
+        <div className="col-md-1">
           <button className="btn btn-primary" onClick={handleSearchClick}>
             Search
           </button>

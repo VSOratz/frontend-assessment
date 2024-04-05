@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import InputMask from 'react-input-mask';
 import validator from 'validator';
 
 const ContactAgent = () => {
-  // Desestruturar props
-  const [formData, setFormData] = useState({ fullName: '', email: '', phone: '', comments: '' });
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    phone: '',
+    comments: '',
+  });
   const [errors, setErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const phoneInputRef = useRef(null);
 
   const { fullName, email, phone, comments } = formData;
 
@@ -16,10 +21,10 @@ const ContactAgent = () => {
     if (!fullName || fullName.length < 3) {
       newErrors.fullName = 'Full name is required (minimum 3 characters)';
     }
-    if (!validator.isEmail(email)) { // Usar a biblioteca validator.js para validar e-mail
+    if (!validator.isEmail(email)) {
       newErrors.email = 'Please enter a valid email address';
     }
-    if (!validator.isMobilePhone(phone, 'en-US')) { // Validar número de telefone com código de país dos EUA
+    if (!validator.isMobilePhone(phone, 'en-US')) {
       newErrors.phone = 'Please enter a valid US phone number';
     }
     if (!comments || comments.length < 3) {
@@ -33,14 +38,13 @@ const ContactAgent = () => {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.id]: e.target.value
+      [e.target.id]: e.target.value,
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      // Lógica para enviar o formulário
       setIsSubmitted(true);
     }
   };
@@ -51,26 +55,70 @@ const ContactAgent = () => {
       {!isSubmitted ? (
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label htmlFor="fullName" className="form-label">Full Name</label>
-            <input type="text" className={`form-control ${errors.fullName ? 'is-invalid' : ''}`} id="fullName" value={fullName} onChange={handleChange} />
-            {errors.fullName && <div className="invalid-feedback">{errors.fullName}</div>}
+            <label htmlFor="fullName" className="form-label">
+              Full Name
+            </label>
+            <input
+              type="text"
+              className={`form-control ${errors.fullName ? 'is-invalid' : ''}`}
+              id="fullName"
+              value={fullName}
+              onChange={handleChange}
+            />
+            {errors.fullName && (
+              <div className="invalid-feedback">{errors.fullName}</div>
+            )}
           </div>
           <div className="mb-3">
-            <label htmlFor="email" className="form-label">Email</label>
-            <input type="email" className={`form-control ${errors.email ? 'is-invalid' : ''}`} id="email" value={email} onChange={handleChange} />
-            {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+            <label htmlFor="email" className="form-label">
+              Email
+            </label>
+            <input
+              type="email"
+              className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+              id="email"
+              value={email}
+              onChange={handleChange}
+            />
+            {errors.email && (
+              <div className="invalid-feedback">{errors.email}</div>
+            )}
           </div>
           <div className="mb-3">
-            <label htmlFor="phone" className="form-label">Phone Number</label>
-            <InputMask mask="+1 (999) 999-9999" className={`form-control ${errors.phone ? 'is-invalid' : ''}`} id="phone" value={phone} onChange={handleChange} />
-            {errors.phone && <div className="invalid-feedback">{errors.phone}</div>}
+            <label htmlFor="phone" className="form-label">
+              Phone Number
+            </label>
+            <InputMask
+              mask="+1 (999) 999-9999"
+              className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
+              id="phone"
+              value={phone}
+              onChange={handleChange}
+              inputRef={phoneInputRef}
+            />{' '}
+            {/* Use a ref diretamente no InputMask */}
+            {errors.phone && (
+              <div className="invalid-feedback">{errors.phone}</div>
+            )}
           </div>
           <div className="mb-3">
-            <label htmlFor="comments" className="form-label">Comments</label>
-            <textarea className={`form-control ${errors.comments ? 'is-invalid' : ''}`} id="comments" rows="3" value={comments} onChange={handleChange}></textarea>
-            {errors.comments && <div className="invalid-feedback">{errors.comments}</div>}
+            <label htmlFor="comments" className="form-label">
+              Comments
+            </label>
+            <textarea
+              className={`form-control ${errors.comments ? 'is-invalid' : ''}`}
+              id="comments"
+              rows="3"
+              value={comments}
+              onChange={handleChange}
+            ></textarea>
+            {errors.comments && (
+              <div className="invalid-feedback">{errors.comments}</div>
+            )}
           </div>
-          <button type="submit" className="btn btn-primary">Contact Now</button>
+          <button type="submit" className="btn btn-primary">
+            Contact Now
+          </button>
         </form>
       ) : (
         <div className="alert alert-success mt-3" role="alert">

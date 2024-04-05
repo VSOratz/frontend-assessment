@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ContactAgent from '../Contact/ContactAgent';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
@@ -6,10 +6,32 @@ import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons';
 
 const ListingModal = ({ listing, show, onClose }) => {
   const [isSaved, setIsSaved] = useState(false);
+  const saveButtonRef = useRef(null);
 
   const handleSaveProperty = () => {
-    setIsSaved(!isSaved);
+    const savedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    const isCurrentlySaved = savedFavorites.includes(listing.Id);
+
+    if (isCurrentlySaved) {
+      const updatedFavorites = savedFavorites.filter(
+        (itemId) => itemId !== listing.Id,
+      );
+      localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+    } else {
+      const updatedFavorites = [...savedFavorites, listing.Id];
+      localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+    }
+
+    setIsSaved(!isCurrentlySaved);
   };
+
+  useEffect(() => {
+    if (listing) {
+      const savedFavorites =
+        JSON.parse(localStorage.getItem('favorites')) || [];
+      setIsSaved(savedFavorites.includes(listing.Id));
+    }
+  }, [listing]);
 
   if (!show || !listing) {
     return null;
@@ -17,18 +39,35 @@ const ListingModal = ({ listing, show, onClose }) => {
 
   return (
     <div className="modal fade show" style={{ display: 'block' }}>
-      <div className="modal-dialog modal-dialog-centered" style={{ maxWidth: '900px' }}>
-        <span className="close" onClick={onClose}>&times;</span>
+      <div
+        className="modal-dialog modal-dialog-centered"
+        style={{ maxWidth: '900px' }}
+      >
+        <span className="close" onClick={onClose}>
+          &times;
+        </span>
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">{listing.Title}</h5>
-            <button type="button" className="btn-close" aria-label="Close" onClick={onClose}></button>
+            <button
+              type="button"
+              className="btn-close"
+              aria-label="Close"
+              onClick={onClose}
+            ></button>
           </div>
           <div className="modal-body">
             <div className="row">
               <div className="col-md-8">
                 <div className="row">
-                  <div className="col-md-12" style={{ textAlign: 'right', fontWeight: 'bold', fontSize: '24px'}}>
+                  <div
+                    className="col-md-12"
+                    style={{
+                      textAlign: 'right',
+                      fontWeight: 'bold',
+                      fontSize: '24px',
+                    }}
+                  >
                     <p>${listing['Sale Price']}</p>
                   </div>
                 </div>
@@ -37,12 +76,20 @@ const ListingModal = ({ listing, show, onClose }) => {
                     <p>Location: {listing.Location}</p>
                   </div>
                   <div className="col-md-6" style={{ textAlign: 'right' }}>
-                    <p>Date Listed: {new Date(listing.DateListed).toLocaleDateString()}</p>
+                    <p>
+                      Date Listed:{' '}
+                      {new Date(listing.DateListed).toLocaleDateString()}
+                    </p>
                   </div>
                 </div>
                 <hr />
                 <div className="col-md-6 d-flex justify-content-center">
-                  <img src={listing.PictureURL} alt={listing.Title} className="img-fluid mb-4" style={{ width: '100%' }} />
+                  <img
+                    src={listing.PictureURL}
+                    alt={listing.Title}
+                    className="img-fluid mb-4"
+                    style={{ width: '100%' }}
+                  />
                 </div>
                 <div className="row">
                   <div className="col-md-2">
@@ -65,7 +112,12 @@ const ListingModal = ({ listing, show, onClose }) => {
                 <p>{listing.Description}</p>
               </div>
               <div className="col-md-4">
-                <button type="button" className="btn btn-outline-danger mb-3" onClick={handleSaveProperty}>
+                <button
+                  ref={saveButtonRef}
+                  type="button"
+                  className="btn btn-outline-danger mb-3"
+                  onClick={handleSaveProperty}
+                >
                   <FontAwesomeIcon icon={isSaved ? faHeart : farHeart} />
                   Save Property
                 </button>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ListingItem from '../ListingItem/ListingItem';
 import Filter from '../Filter/Filter';
 import listingsData from '../../data/listings.json';
@@ -7,22 +7,38 @@ import './ListingPage.css';
 
 const ListingPage = () => {
   const [filteredListings, setFilteredListings] = useState(listingsData);
-  const [selectedListing, setSelectedListing] = useState(null); // Estado para controlar a listagem selecionada
+  const [selectedListing, setSelectedListing] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
   const handleFilterChange = (filters) => {
-    console.log('Filters:', filters);
+    if (filters.isFavorite) {
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      const listingsDataFavorites = favorites
+        .map((id) => listingsData.find((listing) => listing.Id === id))
+        .filter(Boolean);
 
-    const updatedListings = listingsData.filter((listing) => {
-      return (
-        (!filters.bedrooms || listing.Bedrooms === filters.bedrooms) &&
-        (!filters.bathrooms || listing.Bathrooms === filters.bathrooms) &&
-        (!filters.parking || listing.Parking === filters.parking) &&
-        (!filters.priceRange || listing['Sale Price'] <= filters.priceRange)
-      );
-    });
+      const updatedListings = listingsDataFavorites.filter((listing) => {
+        return (
+          (!filters.bedrooms || listing.Bedrooms === filters.bedrooms) &&
+          (!filters.bathrooms || listing.Bathrooms === filters.bathrooms) &&
+          (!filters.parking || listing.Parking === filters.parking) &&
+          (!filters.priceRange || listing['Sale Price'] <= filters.priceRange)
+        );
+      });
 
-    setFilteredListings(updatedListings);
+      setFilteredListings(updatedListings);
+    } else {
+      const updatedListings = listingsData.filter((listing) => {
+        return (
+          (!filters.bedrooms || listing.Bedrooms === filters.bedrooms) &&
+          (!filters.bathrooms || listing.Bathrooms === filters.bathrooms) &&
+          (!filters.parking || listing.Parking === filters.parking) &&
+          (!filters.priceRange || listing['Sale Price'] <= filters.priceRange)
+        );
+      });
+
+      setFilteredListings(updatedListings);
+    }
   };
 
   const handleViewDetails = (listing) => {
