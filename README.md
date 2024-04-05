@@ -32,6 +32,9 @@ The agent contact form allows users to send messages to the agent responsible fo
 ## Utilities
 - **LocalStorage:** Used to store user favorites.
 - **Form Validation:** Used to validate user input data in the agent contact form.
+- **filterListings:** Function to filter property listings based on user-defined criteria.
+- **validateForm:** Function to validate form input data in the agent contact form.
+- **formatDate:** Function to format date strings into a readable format.
 
 ## How to Run
 1. Clone this repository.
