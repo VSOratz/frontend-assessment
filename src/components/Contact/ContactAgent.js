@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import InputMask from 'react-input-mask';
-import validator from 'validator';
 import { validateForm } from '../../Util/Util';
 
 const ContactAgent = () => {

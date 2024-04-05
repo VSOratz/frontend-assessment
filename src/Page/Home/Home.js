@@ -1,13 +1,15 @@
 import React from 'react';
 import ListingPage from '../Listing/ListingPage';
-import Header from '../../components/Header/Header'
-import Footer from '../../components/Footer/Footer'
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
 
 const HomePage = () => {
   return (
     <div>
       <Header />
-      <ListingPage />
+      <div style={{ marginBottom: '50px' }}>
+        <ListingPage />
+      </div>
       <Footer />
     </div>
   );
