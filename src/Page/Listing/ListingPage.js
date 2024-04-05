@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import ListingItem from '../Item/ListingItem';
 import Filter from '../../components/Filter/Filter';
 import listingsData from '../../data/listings.json';
 import DetailModal from '../../components/Modal/Detail/DetailModal';
 import { filterListings } from '../../Util/Util';
+import ListingItem from '../../components/Item/ListingItem';
 
 const ListingPage = () => {
   const [filteredListings, setFilteredListings] = useState(listingsData);
