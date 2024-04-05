@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ListingItem from '../Item/ListingItem';
 import Filter from '../../components/Filter/Filter';
 import listingsData from '../../data/listings.json';
-import ListingModal from '../../components/Modal/Detail/DetailModal';
+import DetailModal from '../../components/Modal/Detail/DetailModal';
 import { filterListings } from '../../Util/Util';
 
 const ListingPage = () => {
@@ -38,7 +38,7 @@ const ListingPage = () => {
           ))}
         </div>
       </div>
-      <ListingModal
+      <DetailModal
         show={showModal}
         onClose={() => setShowModal(false)}
         listing={selectedListing}
