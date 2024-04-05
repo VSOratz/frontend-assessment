@@ -3,6 +3,7 @@ import ContactAgent from '../../Contact/ContactAgent';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons';
+import { formatDate } from '../../../Util/Util';
 
 const ModalBody = ({ listing, isSaved, saveButtonRef, handleSaveProperty }) => {
   return (
@@ -18,7 +19,12 @@ const ModalBody = ({ listing, isSaved, saveButtonRef, handleSaveProperty }) => {
                 fontSize: '24px',
               }}
             >
-              <p>${listing['Sale Price']}</p>
+              <p>
+                {listing['Sale Price'].toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: 'USD',
+                })}
+              </p>
             </div>
           </div>
           <div className="row">
@@ -26,13 +32,11 @@ const ModalBody = ({ listing, isSaved, saveButtonRef, handleSaveProperty }) => {
               <p>Location: {listing.Location}</p>
             </div>
             <div className="col-md-6" style={{ textAlign: 'right' }}>
-              <p>
-                Date Listed: {new Date(listing.DateListed).toLocaleDateString()}
-              </p>
+              <p>Date Listed: {formatDate(listing.DateListed)}</p>
             </div>
           </div>
           <hr />
-          <div className="col-md-6 d-flex justify-content-center">
+          <div className="col-md-6 d-flex justify-content-center align-items-center">
             <img
               src={listing.PictureURL}
               alt={listing.Title}
@@ -40,24 +44,44 @@ const ModalBody = ({ listing, isSaved, saveButtonRef, handleSaveProperty }) => {
               style={{ width: '100%' }}
             />
           </div>
+
+          <hr />
+          
           <div className="row">
-            <div className="col-md-2">
-              <p>BED: {listing.Bedrooms}</p>
+            <div className="col-md-2 text-center">
+              <p>{listing.Bedrooms}</p>
+              <p>
+                <strong>BED</strong>
+              </p>
             </div>
-            <div className="col-md-2">
-              <p>BATH: {listing.Bathrooms}</p>
+            <div className="col-md-2 text-center">
+              <p>{listing.Bathrooms}</p>
+              <p>
+                <strong>BATH</strong>
+              </p>
             </div>
-            <div className="col-md-2">
-              <p>PARKING: {listing.Parking}</p>
+            <div className="col-md-2 text-center">
+              <p>{listing.Parking}</p>
+              <p>
+                <strong>PARKING</strong>
+              </p>
             </div>
-            <div className="col-md-2">
-              <p>SQFT: {listing.Sqft}</p>
+            <div className="col-md-2 text-center">
+              <p>{listing.Sqft}</p>
+              <p>
+                <strong>SQFT</strong>
+              </p>
             </div>
-            <div className="col-md-2">
-              <p>Year Built: {listing.YearBuilt}</p>
+            <div className="col-md-2 text-center">
+              <p>{listing.YearBuilt}</p>
+              <p>
+                <strong>Year Built</strong>
+              </p>
             </div>
           </div>
+
           <hr />
+
           <p>{listing.Description}</p>
         </div>
         <div className="col-md-4">
