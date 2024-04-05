@@ -1,5 +1,3 @@
-// utils.js
-
 import validator from 'validator';
 
 export const filterListings = (filters, listingsData) => {
