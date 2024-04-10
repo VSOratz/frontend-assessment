@@ -8,26 +8,30 @@ const DetailModal = ({ listing, show, onClose }) => {
 
   const handleSaveProperty = () => {
     const savedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    const isCurrentlySaved = savedFavorites.includes(listing.Id);
+    if (Array.isArray(savedFavorites)) {
+      const isCurrentlySaved = savedFavorites.includes(listing.Id);
 
-    if (isCurrentlySaved) {
-      const updatedFavorites = savedFavorites.filter(
-        (itemId) => itemId !== listing.Id,
-      );
-      localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-    } else {
-      const updatedFavorites = [...savedFavorites, listing.Id];
-      localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+      if (isCurrentlySaved) {
+        const updatedFavorites = savedFavorites.filter(
+          (itemId) => itemId !== listing.Id,
+        );
+        localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+      } else {
+        const updatedFavorites = [...savedFavorites, listing.Id];
+        localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+      }
+
+      setIsSaved(!isCurrentlySaved);
     }
-
-    setIsSaved(!isCurrentlySaved);
   };
 
   useEffect(() => {
     if (listing) {
       const savedFavorites =
         JSON.parse(localStorage.getItem('favorites')) || [];
-      setIsSaved(savedFavorites.includes(listing.Id));
+      if (Array.isArray(savedFavorites)) {
+        setIsSaved(savedFavorites.includes(listing.Id));
+      }
     }
   }, [listing]);
 
