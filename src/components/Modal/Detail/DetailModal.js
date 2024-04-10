@@ -7,7 +7,7 @@ const DetailModal = ({ listing, show, onClose }) => {
   const saveButtonRef = useRef(null);
 
   const handleSaveProperty = () => {
-    const savedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    let savedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
     if (Array.isArray(savedFavorites)) {
       const isCurrentlySaved = savedFavorites.includes(listing.Id);
 
@@ -27,7 +27,7 @@ const DetailModal = ({ listing, show, onClose }) => {
 
   useEffect(() => {
     if (listing) {
-      const savedFavorites =
+      let savedFavorites =
         JSON.parse(localStorage.getItem('favorites')) || [];
       if (Array.isArray(savedFavorites)) {
         setIsSaved(savedFavorites.includes(listing.Id));
